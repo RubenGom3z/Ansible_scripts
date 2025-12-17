@@ -1,8 +1,7 @@
 - name: Verificación NETCONF
   hosts: all
   gather_facts: false
-  # Definimos la conexión de red a nivel global del play
-  
+
 
   tasks:
     - name: Ensure netconf is enabled
@@ -23,7 +22,6 @@
         port: 830
         state: started
         timeout: 10
-      # Usamos delegate_to en lugar de connection: local para evitar conflictos de plugin
       
       
     - debug: 
