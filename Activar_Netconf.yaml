@@ -1,0 +1,30 @@
+- name: Verificación NETCONF
+  hosts: all
+  gather_facts: false
+  # Definimos la conexión de red a nivel global del play
+  
+
+  tasks:
+    - name: Ensure netconf is enabled
+      connection: ansible.netcommon.network_cli
+      cisco.nxos.nxos_feature:
+        feature: netconf
+        state: enabled
+
+
+    - name: Pausa técnica para permitir inicio del servicio
+      pause:
+        seconds: 10
+
+    - name: Verificar que el puerto 830 está abierto
+      connection: local
+      wait_for:
+        host: "{{ ansible_host | default(inventory_hostname) }}"
+        port: 830
+        state: started
+        timeout: 10
+      # Usamos delegate_to en lugar de connection: local para evitar conflictos de plugin
+      
+      
+    - debug: 
+        msg: "El puerto 830 está abierto y accesible en {{ inventory_hostname }}"
